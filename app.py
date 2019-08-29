@@ -56,6 +56,7 @@ def get_ip():
 
 def get_loc():
     ip = get_ip()
+    print(ip)
     city = ip.get('city')
     zipcode = ip['zip']
     url = 'http://www.datasciencetoolkit.org/maps/api/geocode/json?address={}+{}'.format(str(city),str(zipcode))
