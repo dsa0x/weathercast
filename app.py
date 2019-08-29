@@ -36,7 +36,7 @@ def weather(lat, lon):
 def get_ip():
     #Get Ip address from user header
     ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-    print(ip)
+    print('nawaoooo'+ip)
     #get geolocation from IP Address
     r = requests.get('http://ip-api.com/json/{}'.format(ip))
     ip_api = r.json()
