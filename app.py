@@ -40,7 +40,7 @@ def get_ip():
     r = requests.get('http://ip-api.com/json/{}'.format(ip))
     ip_api = r.json()
     if ip_api['status'] != 'success':
-        print('getip'+ip)
+        print('getip'+ip_api)
         return {
             'status': ip_api['status'],
             'city': ip_api['city'],
