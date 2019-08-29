@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session, url_for, redirect
+from flask import Flask, request, jsonify, session, url_for, redirect, render_template
 import os
 import config
 import requests
@@ -35,11 +35,14 @@ def weather(lat, lon):
 
 def get_ip():
     #Get Ip address from user header
-    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+    if 'X-Forwarded-For' in request.headers:
+        ip = str(request.headers['X-Forwarded-For'])
+    else:
+        ip = str(request.environ.get('HTTP_X_REAL_IP', request.remote_addr))
     #get geolocation from IP Address
     r = requests.get('http://ip-api.com/json/{}'.format(ip))
     ip_api = r.json()
-    if ip_api['status'] != 'success':
+    if ip_api['status'] == 'success':
         print(ip_api)
         return {
             'status': ip_api['status'],
@@ -51,6 +54,7 @@ def get_ip():
             'ip': ip_api['query']
         }
     else:
+        print(ip_api)
         return None
 
 
@@ -73,7 +77,9 @@ def get_loc():
         return None
 
 
-
+@app.errorhandler(404)
+def error_404(e):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run()
