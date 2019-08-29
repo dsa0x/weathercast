@@ -36,27 +36,26 @@ def weather(lat, lon):
 def get_ip():
     #Get Ip address from user header
     ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-    print('nawaoooo'+ip)
     #get geolocation from IP Address
     r = requests.get('http://ip-api.com/json/{}'.format(ip))
     ip_api = r.json()
     if ip_api['status'] != 'success':
+        return {
+            'status': ip_api['status'],
+            'city': ip_api['city'],
+            "zip": ip_api['zip'],
+            "lat": ip_api['lat'],
+            "lon": ip_api['lon'],
+            'country': ip_api['country'],
+            'ip': ip_api['query']
+        }
+    else:
         return None
-    return {
-        'status': ip_api['status'],
-        'city': ip_api['city'],
-        "zip": ip_api['zip'],
-        "lat": ip_api['lat'],
-        "lon": ip_api['lon'],
-        'country': ip_api['country'],
-        'ip': ip_api['query']
-    }
 
 
 
 def get_loc():
     ip = get_ip()
-    print(ip)
     city = ip.get('city')
     zipcode = ip['zip']
     url = 'http://www.datasciencetoolkit.org/maps/api/geocode/json?address={}+{}'.format(str(city),str(zipcode))
