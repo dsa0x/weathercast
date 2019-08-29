@@ -40,6 +40,7 @@ def get_ip():
     r = requests.get('http://ip-api.com/json/{}'.format(ip))
     ip_api = r.json()
     if ip_api['status'] != 'success':
+        print('getip'+ip)
         return {
             'status': ip_api['status'],
             'city': ip_api['city'],
@@ -56,6 +57,7 @@ def get_ip():
 
 def get_loc():
     ip = get_ip()
+    print('getloc'+ip)
     city = ip.get('city')
     zipcode = ip['zip']
     url = 'http://www.datasciencetoolkit.org/maps/api/geocode/json?address={}+{}'.format(str(city),str(zipcode))
