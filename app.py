@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session, url_for, redirect, render_template
+from flask import Flask, request, jsonify, session, url_for, redirect, render_template, request
 import os
 import config
 import requests
@@ -6,7 +6,7 @@ from urllib.parse import urlencode, quote_plus
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "os.environ.get('SECRET')"
+app.config['SECRET_KEY'] = "youcantseeme"
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -30,12 +30,16 @@ def weather(lat, lon):
     description = weather['weather'][0]['description']
     main = weather['weather'][0]['main']
     icon = weather['weather'][0]['icon']
+    time = weather['dt']
+    xtime = datetime.fromtimestamp(time)
+    formtime = xtime.strftime("%a, %d %B %Y")
     ip = get_ip()
     city = ip['city']
     country = ip['country']
     lists = getweather3hr(lat, lon)
     if weather['cod'] == 200:
-        return render_template('index.html', temperature=temperature, description=description, icon=icon, city=city, country=country,main=main, lists=lists)
+        return render_template('index.html', temperature=temperature, description=description,
+        formtime=formtime, icon=icon, city=city, country=country,main=main, lists=lists)
     else:
         return redirect(url_for('error_404'))
 
@@ -44,7 +48,7 @@ def get_ip():
     if 'X-Forwarded-For' in request.headers:
         ip = str(request.headers['X-Forwarded-For'])
     else:
-        ip = str(request.environ.get('HTTP_X_REAL_IP', request.remote_addr))
+        ip = '130.75.172.30' #str(request.environ.get('HTTP_X_REAL_IP', request.remote_addr))
     #get geolocation from IP Address
     r = requests.get('http://ip-api.com/json/{}'.format(ip))
     ip_api = r.json()
@@ -59,8 +63,7 @@ def get_ip():
             'ip': ip_api['query']
         }
     else:
-        print(ip_api)
-        return None
+        return redirect(url_for('error_404'))
 
 
 def getweather3hr(lat,lon):
@@ -76,16 +79,15 @@ def getweather3hr(lat,lon):
     listmain = []
     listicon = []
     listime = []
-    for i in range(1,7):
+    for i in range(0,6):
         listemp.append(int(weather['list'][i]['main']['temp']))
         listdesc.append(weather['list'][i]['weather'][0]['description'])
         listmain.append(weather['list'][i]['weather'][0]['main'])
         listicon.append(weather['list'][i]['weather'][0]['icon'])
         time = weather['list'][i]['dt_txt']
         xtime = datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
-        formtime = xtime.strftime("%H:%M:%S")
+        formtime = xtime.strftime("%H:%M")
         listime.append(formtime)
-    print(time)
     return {
         'temperature':listemp,
         'description':listdesc,
@@ -109,7 +111,7 @@ def get_loc():
         }
         
     else:
-        return None
+        return redirect(url_for('error_404'))
 
 
 @app.errorhandler(404)
@@ -118,5 +120,3 @@ def error_404(e):
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-'2019-08-29 12:00:00'

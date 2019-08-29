@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title> Weather Widget - Responsive</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="html.design">
+<!-- description -->
+<meta name="description" content="Weather Widget - Responsive Template">
+<link rel="shortcut icon" href="/static/images/favicon.ico">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<!-- Fontawesome CSS -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css">
+<!-- Fonts and icons -->
+<link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700" rel="stylesheet"> 
+<!-- Reset CSS -->
+<link rel="stylesheet" href="/static/css/reset.css">
+<!-- Style CSS -->
+<link rel="stylesheet" href="/static/css/style.css">
+<!-- Responsive  CSS -->
+<link rel="stylesheet" href="/static/css/responsive.css">
+</head>
+<body>
+
+<div class="weathar-box">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<h2 class="title-wb">{{ city }} , {{ country }} Weather Forecast</h2>
+				<h3 class="title-wb">{{ formtime }}</h3>
+			</div>
+		</div>
+		<div class="row justify-content-md-center">
+			<div class="col-6">
+				<div class="col-widget-3">
+					<div class="currentWeather">
+						<h2>
+							{{ city.upper() }} WEATHER
+						</h2>
+						<div class="row align-items-center">
+							<div class="col-lg-6">
+								<div class="temp-desc">
+									<h5>{{temperature}} °C</h5>
+									<h5>{{ description }}</h5>
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="icon-c">
+									<img src="http://openweathermap.org/img/wn/{{icon}}@2x.png" alt="{{icon}}" title="{{description}}"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="weatherforecast">
+						{% for i in range(0,6) %}
+						<ul>
+							<li class="day old">
+								<div class="dayname">
+									<span>{{ lists['time'][i]}}</span>
+								</div>
+								<div class="sm-day-icon">
+									<img src="http://openweathermap.org/img/wn/{{lists['icon'][i]}}@2x.png" alt="{{lists['description'][i]}}" title="{{lists['description'][i]}}"/>
+								</div>
+								<div class="temps-day">
+									<div class="temp-day"></div>
+									<div class="temp-m-day">{{ lists['temperature'][i] }} °C</div>
+								</div>
+							</li>
+						</ul>
+						{% endfor%}
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<p class="copyright text-center"> Template By : 
+					<a href="https://html.design/">html design</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- jquery latest version -->
+<script src="/static/js/jquery.min.js"></script>
+<!-- popper.min.js -->
+<script src="/static/js/popper.min.js"></script>    
+<!-- bootstrap js -->
+<script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>
